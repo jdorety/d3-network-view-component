@@ -4,15 +4,15 @@ import viteLogo from "/vite.svg";
 import useSWR from "swr";
 import "./App.css";
 
-function App() {
-  const baseUrl = import.meta.env.VITE_NEXUS_URL;
-  const apiKey = import.meta.env.VITE_API_KEY;
-  console.log(baseUrl, apiKey);
-  const [count, setCount] = useState(0);
-  const url = new URL("/fluree/query", baseUrl);
+const baseUrl = import.meta.env.VITE_NEXUS_URL;
+const apiKey = import.meta.env.VITE_API_KEY;
+console.log(baseUrl, apiKey);
+const url = new URL("/fluree/query", baseUrl);
 
+function App() {
+  const [count, setCount] = useState(0);
   const query = {
-    from: "fluree-jld/387028092977893",
+    from: "fluree-jld/387028092977998",
     where: { "@id": "?s", "?p": "?o" },
     select: ["?s", "?p", "?o"],
   };
@@ -24,7 +24,14 @@ function App() {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify(query),
-    }).then((res) => res.json())
+    })
+      .then((res) => {
+        console.log("status", res.status);
+        return res.json();
+      })
+      .catch((err) => {
+        console.error(err);
+      })
   );
 
   console.log({ data });
